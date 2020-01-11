@@ -1,0 +1,46 @@
+cc= read.csv("D:/R/Assignments/Customer_Churn.csv")
+cc%>%select("MOnthlyCharges","tenure","TotalCharges")->csf
+kmeans(cc$MonthlyCharges,3)->km
+cbind(Month=cc$MonthlyCharges,Clusters=km$cluster)->month_g
+head(month_g)
+as.data.frame(month_g)-> month_g
+month_g%>%filter(Clusters==1)->mg1
+library(dplyr)
+month_g%>%filter(Clusters==2)->mg2
+month_g%>%filter(Clusters==3)->mg3
+
+kmeans(cc$tenure,3)->tg
+cbind(Month=cc$tenure,Clusters=tg$cluster)->tgd
+head(tgd)
+as.data.frame(tgd)->tgd
+tgd%>%filter(Clusters==1)->tgd1
+tgd%>%filter(Clusters==2)->tgd2
+tgd%>%filter(Clusters==3)->tgd3
+
+data("iris")
+is<- iris
+km<-kmeans(iris[,1:4],3)
+library("animation")
+install.packages("animation")
+kmeans.ani(iris[,1:4],3)
+km$cluster
+km$centers
+km$totss
+km$withinss
+km$tot.withinss
+km$betweenss
+km$size
+
+mydata<-iris[,c(1:4)]
+kmax=20
+twss=rep(0,kmax)
+ratio=rep(0,kmax)
+
+for(i in 1:kmax){
+  set.seed(1234)
+  km=kmeans(mydata,centers = i,nstart = 10,iter.max = 1000000)
+  twss[i]<-km$tot.withinss
+  ratio[i]<-km$betweenss/km$totss
+}
+
+plot(1:kmax,twss,ttype = "b",xlab = "Number of Clusters",ylab = "TWSS",col="blue")
