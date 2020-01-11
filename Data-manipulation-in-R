@@ -1,0 +1,94 @@
+#Questions on select() function:
+  
+ # 1.	Extract these individual columns:
+  #a.	Extract the 5th column & store it in 'customer_5'
+#b.	Extract the 15th column & store it in 'customer_15'
+
+#2.	Extract the column numbers 3,6,9,12,15 & 18 and store the result in 'customer_3_multiple'
+
+#3.	Extract all the columns from column number-10 to column number-20 and store the result in 'c_10_20'
+
+#4.	Extract all the columns which start with letter 'P' & store it in 'customer_P'
+
+#5.	Extract all the columns which end with letter 's' & store it in 'customer_s'
+
+cc<- read.csv("Customer_Churn.csv")
+
+library(dplyr)
+select(cc,5)-> cus_5
+select(cc,15)-> cus_15
+
+select(cc,3,6,9,12,15,18)-> customer_3_multiple
+
+select(cc,10:20)-> c_10_20
+
+select(cc,starts_with("p"))-> cus_p
+
+select(cc,ends_with("s"))-> cus_s
+
+#Questions on filter() function:
+  
+ # 1.	Extract all the customers whose Internet Service is "DSL" & store the result in 'customer_dsl'
+
+#2.	Extract all the customers whose Contract type is 'Month-to-month' & store the result in 'customer_month'
+
+#3.	Extract all the male senior citizens whose Payment Method is Electronic check & store the result in 'senior_male_electronic'
+
+#4.	Extract all those customers whose tenure is greater than 70 months or their Total charges is more than 8000$ & store the result in 'customer_total_tenure'
+
+#5.	Extract all the customers whose Contract is of two years, payment method is Mailed check & the value of Churn is 'Yes' & store the result in 'two_mail_yes'
+
+filter(cc,InternetService=="DSL") -> cus_dsl
+
+filter(cc,Contract=="Month-to-month")-> cus_month
+
+filter(cc,gender=="Male"&SeniorCitizen==1&PaymentMethod=="Electronic check")-> ma_el_check
+
+filter(cc,tenure>70 | TotalCharges>8000)-> t_t_cus
+
+filter(cc,Contract=="Two year"&PaymentMethod=="Mailed check"&Churn=="Yes")->two_mail_yes
+
+#Questions on sample_n(), sample_frac() & count():
+  
+ # 1.	Extract 333 random records from the customer_churn dataframe & store the result in 'customer_333'
+
+#2.	Extract 1000 random records from the customer_churn dataframe & store the result in 'customer_1000'
+
+#3.	Randomly extract 23% of the records from the customer_churn dataframe & store the result in 'customer_23_percent'
+
+#4.	Get the count of different levels from the 'PaymentMethod' column
+
+#5.	Get the count of different levels from the 'Churn' column
+
+sample_n(cc,333)-> cus_333
+sample_n(cc,1000)-> cus_1000
+
+sample_frac(cc,.23)-> cus_23per
+
+table(cc$PaymentMethod)
+levels(cc$PaymentMethod)
+count(cc,PaymentMethod)
+
+count(cc,Churn)
+
+#Questions on summarise() & group_by():
+  
+ # 1.	Get the median, variance & standard deviation for the 'tenure' column
+
+#2.	Get the median, variance & standard deviation for the 'MonthlyCharges' column
+
+#3.	Get the standard deviation of 'tenure' & group it w.r.t 'PaymentMethod' column
+
+#4.	Get the median of 'MonthlyCharges' & group it w.r.t 'Contract' column
+
+#5.	Get the variance of 'TotalCharges' & group it w.r.t 'InternetService' column
+
+summarise(cc,median_tenure=median(tenure),sd_tenure=sd(tenure),variance_t=var(tenure))
+
+summarise(cc,median=median(MonthlyCharges),sd=sd(MonthlyCharges),variance=var(MonthlyCharges))
+
+cc%>%group_by(PaymentMethod)%>%summarise(sd(tenure))
+
+cc%>%group_by(Contract)%>%summarise(median(MonthlyCharges))
+
+cc%>%group_by(InternetService)%>%summarise(var(TotalCharges))
