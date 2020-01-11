@@ -1,0 +1,82 @@
+cc
+library(caTools)
+sample.split(cc$Churn,0.65)->split_tag
+subset(cc,split_tag==T)->train
+subset(cc,split_tag==F)->test
+library(tree)
+install.packages("tree")
+tree(cc$Churn~cc$tenure)->mod_tree1
+mod_tree1
+plot(mod_tree1)
+text(mod_tree1)
+predict(mod_tree1,test,type = "class")->result1
+table(test$Churn,result1)
+
+#Random Forest
+
+library(randomForest)
+install.packages("randomForest")
+randomForest(Churn~MonthlyCharges+tenure+gender+InternetService+Contract,data = train,mtry=3,ntree=100)->mod_forest1
+importance(mod_forest1)
+varImpPlot(mod_forest1)
+predict(mod_forest1,test,type="class")->result_forest2
+table(test$Churn,result_forest2)
+acc1=(1597+310)/(1597+310+214+344)
+acc1
+
+randomForest(Churn~MonthlyCharges+tenure+gender+InternetService+Contract,data = train,mtry=5,ntree=100)->mod_forest3
+importance(mod_forest3)
+varImpPlot(mod_forest3)
+predict(mod_forest3,test,type = "class")->result_forest3
+table(test$Churn,result_forest3)
+acc2=(1579+316)/(1579+316+232+338)
+acc2
+
+library(ISLR)
+data(package="ISLR")
+cs<-Carseats
+install.packages("ISLR")
+
+high= ifelse(cs$Sales<=8,"No","Yes")
+high
+cs=data.frame(cs,high)
+View(cs)
+
+tree.cs=tree(high~.-Sales,data = cs)
+summary(tree.cs)
+plot(tree.cs)
+text(tree.cs,pretty=0)
+
+library(caTools)
+set.seed(101)
+sample.split(cs$high,0.65)->split_tag1
+subset(cs,split_tag1==T)->train1
+subset(cs,split_tag1==F)->test1
+
+tree.cs=tree(high~.-Sales,data =train1)
+summary(tree.cs)
+plot(tree.cs)
+text(tree.cs,pretty=0)
+
+tree.pred=predict(tree.cs,test1,type="class")
+table(test1$high,tree.pred)
+cv.cs=cv.tree(tree.cs,FUN=prune.misclass)
+cv.cs
+plot(cv.cs)
+
+prune.cs=prune.misclass(tree.cs,best=13)
+plot(prune.cs)
+text(prune.cs,pretty=0)
+
+tree.pred=predict(prune.cs,test1,type="class")
+table(test1$high,tree.pred)
+
+prune.cs=prune.misclass(tree.cs,best=8)
+plot(prune.cs)
+text(prune.cs,pretty=0)
+
+text.pred=predict(prune.cs,test1,type="class")
+table(test1$high,tree.pred)
+
+
+
