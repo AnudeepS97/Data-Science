@@ -1,0 +1,155 @@
+install.packages("ggplot2")
+library(ggplot2)
+#Questions on geom_bar():
+  
+ # 1.	Build a bar-plot for the 'PhoneService' column
+#a.	Assign the fill color to be 'pink'
+#b.	Assign the boundary color to be 'peru'
+
+#2.	Build a bar-plot for the 'InternetService' column
+#a.	Assign 'InternetService' to the fill aesthetic
+#b.	Assign 'Contract' to the fill aesthetic
+#c.	Change the position of bars to 'identity'
+
+#3.	Build a bar-plot for 'TechSupport' column
+#a.	Assign 'Churn' to the fill aesthetic
+
+plot(cc$Dependents)
+plot(cc$Dependents,col="coral")
+plot(cc$Dependents,col="coral",xlab="dependents",main="Dristrubution of Dependents")
+
+plot(cc$PhoneService,col="aquamarine4")
+plot(cc$Contract,col="palegreen",xlab="Contract",main="Distribution of Contracts")
+
+hist(cc$tenure,col="olivedrab",breaks = 30)
+
+ggplot(data = cc,aes(x=PhoneService)) + geom_bar()
+
+ggplot(data= cc,aes(x=PhoneService))+geom_bar(fill="pink")
+
+ggplot(cc,aes(x=PhoneService))+geom_bar(fill="pink",col="peru")
+
+ggplot(cc,aes(x=InternetService,fill=InternetService))+geom_bar()
+
+ggplot(cc,aes(x=InternetService,fill=Contract))+geom_bar()
+
+ggplot(cc,aes(x=InternetService,fill=Contract))+geom_bar(position = "identity")
+
+ggplot(cc,aes(x=TechSupport))+geom_bar()
+
+ggplot(cc,aes(x=TechSupport,fill=Churn))+geom_bar()
+
+#Questions on geom_histogram():
+  
+ # 1.	Build a histogram for the 'tenure' column
+#a.	Assign the fill color to be 'mediumspringgreen'
+#b.	Assign the boundary color to be 'azure'
+#c.	Change the number of bins to be 100
+
+#2.	Build histogram for the 'MonthlyCharges' column
+#a.	Assign 'PaymentMethod' to the fill aesthetic
+#b.	Assign 'OnlineBackup' to the fill aesthetic
+
+#3.	Build histogram for the 'TotalCharges' column
+#a.	Assign 'gender' to the fill aesthetic
+#b.	Assign 'InternetService' to the fill aesthetic
+
+ggplot(cc,aes(tenure))+geom_histogram(fill="mediumspringgreen",col="azure",bins=100)
+
+ggplot(cc,aes(MonthlyCharges,fill=PaymentMethod))+geom_histogram()
+
+ggplot(cc,aes(MonthlyCharges,fill=OnlineBackup))+geom_histogram()
+
+ggplot(cc,aes(TotalCharges,fill=gender))+geom_histogram()
+
+ggplot(cc,aes(TotalCharges,fill=InternetService))+geom_histogram()
+
+#Questions on geom_point():
+  
+ # 1.	Build a scatter-plot between 'TotalCharges' & 'tenure'. Map 'TotalCharges' to the y-axis & 'tenure' to the 'x-axis'
+#a.	Assign it the color 'wheat3'
+#b.	Use 'col' as an aesthetic and Map 'PaymentMethod' to col
+#c.	Use 'col' as an aesthetic and Map 'gender' to col
+#d.	Map 'Dependents' to both 'col' & 'shape' aesthetics
+
+#2.	Build a scatter-plot between 'tenure' & 'MonthlyCharges'. Map 'tenure' to the y-axis & 'MonthlyCharges' to the 'x-axis'
+#a.	Assign it the color 'yellowgreen'
+#b.	Use 'col' as an aesthetic and Map 'InternetService' to col
+#c.	Use 'col' as an aesthetic and Map 'Contract' to col
+
+ggplot(cc,aes(tenure,TotalCharges))+geom_point(col="wheat3")
+
+ggplot(cc,aes(tenure,TotalCharges,col=PaymentMethod))+geom_point()
+
+ggplot(cc,aes(tenure,TotalCharges,col=gender))+geom_point()
+
+ggplot(cc,aes(tenure,TotalCharges,col=Dependents,shape=Dependents))+geom_point()
+
+ggplot(cc,aes(y=tenure,x=MonthlyCharges))+geom_point(col="yellowgreen")
+
+ggplot(cc,aes(y=tenure,x=MonthlyCharges,col=InternetService))+geom_point()
+
+ggplot(cc,aes(y=tenure,x=MonthlyCharges,col=Contract))+geom_point()
+
+#Questions on geom_boxplot:
+  
+ # 1.	Build a box-plot between 'tenure' & 'Partner'. Map 'tenure' to the y-axis & 'Partner' to the 'x-axis'
+#a.	Assign it a fill color of 'violet'
+#b.	Assign it a boundary color of 'snow3'
+
+#2.	Build a box-plot between 'tenure' & 'MultipleLines'. Map 'tenure' to the y-axis & 'MultipleLines' to the 'x-axis'
+#a.	Assign 'Partner' to the fill aesthetic
+#b.	Assign 'PhoneService' to the fill aesthetic
+
+#3.	Build a box-plot between 'tenure' & 'Contract'
+#a.	Assign 'InternetService' to the fill aesthetic
+#b.	Assign 'PaymentMethod' to the fill aesthetic
+
+ggplot(cc,aes(Partner,tenure))+geom_boxplot(fill="violet",col="snow3")
+
+ggplot(cc,aes(y=tenure,x=MultipleLines,fill=Partner))+geom_boxplot()
+
+ggplot(cc,aes(y=tenure,x=MultipleLines,fill=PhoneService))+geom_boxplot()
+
+ggplot(cc,aes(y=tenure,x=Contract,fill=InternetService))+geom_boxplot()
+
+ggplot(cc,aes(y=tenure,x=Contract,fill=PaymentMethod))+geom_boxplot()
+
+#Questions on facet_grid():
+  
+ # 1.	Build a box-plot between 'tenure' & 'MultipleLines'. Map 'tenure' on the y-axis & 'MultipleLines' on the x-axis. Map 'InternetService' to the fill aesthetic
+#a.	Facet the plot w.r.t 'InternetService' column
+
+#2.	Build a scatter-plot between 'TotalCharges' & 'tenure'. Map 'TotalCharges' on the y-axis & 'tenure' on the x-axis. Map 'Contract' onto col aesthetic
+#a.	Facet the plot w.r.t 'Contract' column
+
+#3.	Build a histogram for the 'MonthlyCharges' column. Map 'PaymentMethod' onto fill aesthetic.
+#a.	Facet the plot w.r.t 'PaymentMethod' column
+
+ggplot(cc,aes(MultipleLines,tenure,fill=InternetService))+geom_boxplot()+facet_grid(~InternetService)
+
+ggplot(cc,aes(TotalCharges,tenure,col=Contract))+geom_point()+facet_grid(~Contract)
+
+ggplot(cc,aes(MonthlyCharges,fill=PaymentMethod))+geom_histogram()+facet_grid(~PaymentMethod)
+
+#Questions on theme() layer:
+  
+ # 1.	Build a bar-plot for the 'gender' column. Give it a fill color of 'blue4'
+#a.	Give the panel a background color of 'chartreuse4'
+#b.	Give the plot a background color of 'cornsilk4'
+
+#2.	Build a scatter-plot between 'tenure' & 'MonthlyCharges'. Map 'tenure' on the y-axis & 'MonthlyCharges' on the x-axis. Assign a color of 'yellowgreen' to the points.
+#a.	Add a title to the plot 'Tenure vs Monthly Charges'
+#b.	Give the panel a background color of 'coral2'
+#c.	Give the plot a background color of 'beige'
+#d.	Center align the title & make the color of the title to be red
+
+ggplot(cc,aes(x=gender))+geom_bar(fill="blue4")+theme(panel.background = element_rect(fill="chartreuse4"))+theme(plot.background = element_rect(fill="cornsilk4"))
+
+ggplot(cc,aes(MonthlyCharges,tenure))+
+  geom_point(col="yellowgreen")+
+  labs(title ="Tenure vs Monthly Charges")+
+  theme(panel.background = element_rect("coral2"))+
+  theme(plot.background = element_rect("beige"))+
+  theme(plot.title = element_text(hjust = 0.5,colour = "red"))
+     
