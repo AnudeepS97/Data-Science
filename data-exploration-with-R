@@ -1,0 +1,121 @@
+#1.Extract these individual columns with the '$' symbol:
+# a.Extract 'InternetService' column and store it in 'customer_internet_service'
+#b.Extract 'PaperlessBilling' column and store it in 'customer_Paperless_Billing'
+#c.Extract 'StreamingTV' column and store it in 'customer_Streaming_TV'
+
+cc<-read.csv("Customer_churn.csv") 
+cc
+cc$InternetService -> customer_internet_service
+customer_internet_service
+View(customer_internet_service)
+
+cc$PaperlessBilling-> customer_Paperless_Billing
+View(customer_Paperless_Billing)
+
+cc$StreamingTV ->customer_Streaming_TV
+View(customer_Streaming_TV)
+
+#2.Extract the 3rd, 6th and 9th columns from the 'customer_churn' data.frame & store it in 'customer_random_columns'
+
+#3.Extract all the columns from column number-10 to column-number 20 and store the result in 'customer_10_20'
+
+#4.Extract only these row numbers: 65, 765, 3726 & 7000 and store the result in 'customer_random_rows'
+
+#5.Extract all the rows starting from row number-655 to row number-6550 & store the result in 'customer_continuous_rows'
+
+#6.Extract row numbers- 10, 100 & 1000 & column numbers- 5, 10, 15 & store the result in 'customer_random_data'
+
+cc[,c(3,6,9)] -> customer_random_columns
+View(customer_random_columns)
+
+cc[,10:20] -> customer_10_20
+View(customer_10_20)
+
+cc[c(65,765,3726,7000),]-> customer_random_rows
+View(customer_random_rows)
+
+cc[c(10,100,1000),c(5,10,15)]-> customer_random_data
+View(customer_random_data)
+
+#1.Check if the value in the 6th cell of 'PaymentMethod' column is 'Electronic check'. If yes, print "Yes, the payment method is Electronic check"
+#2.Check the value present in 12th cell of 'Contract' column. 
+#If it's 'month-to-month', print 'The contract is on a month to month basis'
+#If it's 'One year', print 'The contract is on a yearly basis'
+#If it's 'Two year', print 'The contract is on a two-year basis'
+#3.Use switch to check the gender in 6th cell of 'gender' column.
+#If it's 'Male', give a discount of 20% in 'MonthlyCharges'
+#If it's 'Female', give a discount of 50% in 'MonthlyCharges'
+#4.Use for loop to get the count of customers whose 'InternetService' is 'DSL'
+#5.Use while to find the number of customers whose tenure is exactly '2' months)
+
+
+if(cc$PaymentMethod[6]=="Electronic check"){
+  print("Yes, the payment method is Electronic check")}
+
+if(cc$Contract[12]=="Month-to-month"){
+  print("The contract is on a month to month basis")
+}else if (cc$Contract[12]=="One year"){
+  print("The contract is on a yearly basis")
+}else{print("The contract is on a two-year basis")}
+
+switch (as.character(cc$gender[6]),
+        "Male"=cc$MonthlyCharges[6]*0.8, 
+        "Female"=cc$MonthlyCharges[6]*0.5) -> cc$MonthlyCharges[6]
+
+
+count=0
+for(i in 1:nrow(cc)){
+  if(cc$InternetService[i]=="DSL"){
+    count=count+1
+  }
+}
+count
+
+count=0
+for(i in 1:nrow(cc)){
+  if(cc$tenure[i]=="2"){
+  count=count+1
+  }
+}
+count
+
+
+count=0
+i=1
+while(i<=nrow(customer_churn)){
+  if(customer_churn$tenure[i]==2){
+    count=count+1
+  }
+  i=i+1
+}
+count
+
+#1.Do these operations with the head() function:
+ # a.Get the first 4 records from 'PhoneService' column
+#b.Get the first 8 records from 'Contract' column
+
+#2.Do these operations with the tail() function:
+ # a.Get the last record of 'TotalCharges' column
+#b.Get the last 5 records of 'tenure' column
+
+#3.Find the average, minimum, maximum & range from the 'tenure' column
+
+#4.Get 10 random values from the 'TotalCharges' column using sample()
+
+#5.Find the count of different levels in 'PaymentMethod' & 'Contract' columns using table() 
+
+head(cc$PhoneService,4)
+
+head(cc$Contract,8)
+
+tail(cc$TotalCharges,1)
+tail(cc$tenure,5)
+
+summary(cc$tenure)
+
+range(cc$tenure)
+
+sample(cc$TotalCharges,10)
+
+table(cc$PaymentMethod)
+table(cc$Contract)
