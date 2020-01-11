@@ -1,0 +1,97 @@
+#1.	Build a simple linear model:
+
+
+ # a.	Divide the data-set into train & test sets in 70:30 ratio. Splitting criteria 
+ #    would be determined by the 'tenure' column
+
+sample.split(cc$tenure,SplitRatio =0.70)->split_tag
+subset(cc,split_tag==T)->train
+subset(cc,split_tag==F)->test
+
+#b.	Build a simple linear model on the 'train' set, where the dependent 
+#   variable is 'tenure' & the independent variable is 'Contract' & store the result in 'model1'
+
+lm(tenure~Contract,train)->model1
+summary(model1)
+
+# c.	Predict the values on top of the 'test' set & store the result in 'predicted_values'
+
+predict(model1,test)->predicted_values
+summary(predicted_values)
+head(predicted_values)
+
+# d.	Bind the actual values & predicted values & store the result in 'final_data'
+
+cbind(actual=test$tenure,predicted=predicted_values)->final_data
+
+as.data.frame(final_data)->final_data
+
+head(final_data)
+
+# e.	Find out the error in prediction & store the result in 'error'
+
+final_data$actual-final_data$predicted->error
+
+head(error)
+
+# f.	Bind 'error' to 'final_data' object
+
+cbind(final_data,error)->final_data
+
+# g.	Find the root mean square error
+
+sqrt(mean((final_data$error)^2))
+
+#**************************************************************************#
+
+#1.	Building a multiple linear regression model
+
+#a.	Divide the data-set into train & test sets
+
+
+cc = read.csv("Customer_Churn.csv")
+View(cc)
+
+library(caTools)
+
+sample.split(cc$tenure,SplitRatio = 0.75)->split_model1
+subset(cc,split_model1==T)->train
+subset(cc,split_model1==F)->test
+
+#b.	Building the multiple linear model
+
+lm(MonthlyCharges~Dependents+MultipleLines+OnlineSecurity+OnlineBackup+DeviceProtection, data=train)-> mod_multi_linear
+
+mod_multi_linear
+
+#c.	Predicting the values on top of the 'test' set
+
+
+predict(mod_multi_linear, newdata = test)->predicted_multi_linear
+
+head(predicted_multi_linear)
+
+#d.	Binding the actual values & the predicted values
+
+cbind(Actual=test$MonthlyCharges,Predicted=predicted_multi_linear)->final_data
+
+as.data.frame(final_data) -> final_data
+
+#e.	Finding the error in prediction
+
+final_data$Actual-final_data$Predicted->error
+
+head(error)
+
+#f.	Binding the 'error' to 'final_data' object
+
+cbind(final_data,error)->final_data
+
+head(final_data)
+
+#g.	Finding the root mean square error
+
+sqrt(mean((final_data$error)^2))
+
+
+#*********************************************************************************#
