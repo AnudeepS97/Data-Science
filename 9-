@@ -1,0 +1,51 @@
+library(arules)
+library(arulesviz)
+data("Groceries")
+summary(Groceries)
+apriori(Groceries,parameter = list(support=0.002,confidence=0.5))->rule1
+inspect(head(rule1))
+inspect(head(sort(rule1,by="lift"),5))
+plot(rule1)
+plot(rule1,method="grouped")
+
+#RECOMMENDATION ENGINE
+
+install.packages("recommenderlab")
+library(recommenderlab)
+data("MovieLense")
+ml=MovieLense
+ml@data
+as.vector(ml@data)->vr
+unique(vr)
+
+vr[vr!=0]->vr
+table(vr)->tr
+tr
+
+ml[rowCounts(ml)>50,colCounts(ml)>100]->rm
+rm
+sample(x=c(T,F),size = nrow(rm),replace = T,prob = c(0.9,0.2))->sm
+rm[sm,]->recc_train
+rm[!sm,]->recc_test
+
+Recommender(data = recc_train,method="UBCF")->rm_ubcf
+n_r_ubcf<-6
+
+predict(object = rm_ubcf,newdata=recc_test,n=n_r_ubcf)->recc_predicted_ubcf
+
+recc_predicted_ubcf@items[[1]]->user1_movie_numbers
+recc_predicted_ubcf@itemLabels[user1_movie_numbers]
+
+recc_predicted_ubcf@items[[5]]->user5_movie_numbers
+recc_predicted_ubcf@itemLabels[user5_movie_numbers]
+
+Recommender(data=recc_train,method="IBCF")->recc_model_ibcf
+n_r_ibcf<-6
+
+predict(object = recc_model_ibcf,newdata=recc_test,n=n_r_ibcf)->recc_predicted_ibcf
+
+recc_predicted_ibcf@items[[1]]->user1_movie_numbers
+recc_predicted_ibcf@itemLabels[user1_movie_numbers]
+
+recc_predicted_ibcf@items[[5]]->user5_movie_numbers
+recc_predicted_ibcf@itemLabels[user5_movie_numbers]
