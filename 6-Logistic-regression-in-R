@@ -1,0 +1,89 @@
+mydata <- read.csv("ChurnData.csv", head= TRUE)
+head(mydata)
+
+mylogit<- glm(Terminations~Premium+Age+Gender+Income+ChronicDis,mydata,family = "binomial")
+summary(mylogit)
+
+newdata<- read.csv("ChurnNew.csv",head = TRUE)
+pred<- predict(mylogit,newdata,type = "response")
+pred
+summary(pred)
+
+newdata1<-cbind(newdata,pred)
+newdata1
+
+#ASSIGNMENT
+
+logit<- glm(cc$Churn~cc$TechSupport,"binomial")
+summary(logit)
+
+predict(logit,data.frame(TechSupport="Yes"),type="response")
+
+predict(logit,data.frame(TechSupport="No"),type="response")
+
+predict(logit,data.frame(TechSupport="No Internet Service"),type="response")
+
+log_mod_2<- glm(cc$Dependents~cc$tenure,family ="binomial")
+summary(log_mod_2)
+
+predict(log_mod_2,data.frame(Tenure=10),type = "response")
+
+predict(log_mod_2,data.frame(Tenure=50),type = "response")->t50
+mean(range(t50))
+predict(log_mod_2,data.frame(Tenure=70),type = "response")->t70
+mean(range(t70))
+
+#MLR 1
+
+library(caTools)
+sample.split(cc$Churn,SplitRatio = 0.65)-> split_tag
+subset(cc, split_tag==T)->train
+subset(cc, split_tag==F)->test
+
+glm(gender~Dependents+InternetService+Contract, data= train, family="binomial") ->log_mod_multi
+
+predict(log_mod_multi,newdata = test,type="response") -> result_log_multi
+
+range(result_log_multi)
+
+table(test$gender, result_log_multi>0.49)
+
+a1=(92+1140)/(92+1140+109+1124)
+a1
+
+#LRM 2
+
+glm(gender~tenure+MonthlyCharges+PaymentMethod,train,family="binomial") ->log_mod_multi2
+
+predict(log_mod_multi2,newdata = test,type="response") -> result_log_multi2
+
+range(result_log_multi2)
+
+table(test$gender, result_log_multi2>0.49)
+
+a2=(220+1044)/(220+1044+205+996)
+a2
+
+#ROCR
+
+library(caTools)
+sample.split(cc$Churn,SplitRatio = 0.80)-> split_tag
+subset(cc, split_tag==T)->train
+subset(cc, split_tag==F)->test
+
+glm(Churn~tenure+MonthlyCharges+PaymentMethod, data= train, family="binomial") ->log_mod_roc
+predict(log_mod_roc,newdata = test,type="response") -> result_log_roc
+
+install.packages("ROCR")
+library(ROCR)
+prediction(result_log_roc,test$Churn) -> predict_log_roc
+
+performance(predict_log_roc,"acc")->acc
+plot(acc)
+
+performance(predict_log_roc,"tpr","fpr")->roc_curve
+plot(roc_curve)
+
+performance(predict_log_roc,"auc")->auc
+auc
+
